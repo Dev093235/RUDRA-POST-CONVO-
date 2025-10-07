@@ -1,9 +1,10 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
+// ✅ Delay helper for all Puppeteer versions
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// --- helper: try multiple selectors and return first visible element handle + selector
+// Helper: find first visible element from selectors
 async function findVisibleElement(page, selectors, timeout = 15000) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
@@ -15,23 +16,20 @@ async function findVisibleElement(page, selectors, timeout = 15000) {
         if (box && box.width > 0 && box.height > 0) {
           return { el, sel };
         }
-      } catch (e) {
-        // ignore
-      }
+      } catch (e) {}
     }
-    await page.waitForTimeout(300);
+    await delay(300);
   }
   return null;
 }
 
-// --- safe method to set text in contenteditable or textarea/input
+// Set text safely
 async function setElementText(page, selector, text) {
   try {
     await page.focus(selector);
     await page.keyboard.type(text, { delay: 30 });
     return true;
   } catch (err) {
-    // fallback
     const ok = await page.evaluate(
       (sel, txt) => {
         const el = document.querySelector(sel);
@@ -58,20 +56,20 @@ async function setElementText(page, selector, text) {
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true, // server-friendly
+    headless: true,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-gpu",
       "--disable-software-rasterizer",
-      "--disable-dev-shm-usage"
+      "--disable-dev-shm-usage",
     ],
     defaultViewport: null,
   });
 
   const page = await browser.newPage();
 
-  // Force desktop UA
+  // Desktop UA
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
   );
@@ -85,12 +83,11 @@ async function setElementText(page, selector, text) {
   const cookies = JSON.parse(fs.readFileSync("cookies.json", "utf8"));
   await page.setCookie(...cookies);
 
-  // Post URL
+  // Facebook post URL
   const postUrl =
     "https://www.facebook.com/61550558518720/posts/pfbid03kYYF6RN2FEBNW8TVRpFDgsHKuRWakijmFdVcraY1v6yPpPN4vPPegJN9YXCHDdml/?app=fbl";
   await page.goto(postUrl, { waitUntil: "networkidle2" });
 
-  // Screenshot to verify
   await page.screenshot({ path: "post-opened.png" });
   console.log("📸 Screenshot saved: post-opened.png");
 
@@ -100,8 +97,13 @@ async function setElementText(page, selector, text) {
     await browser.close();
     return;
   }
-  const comments = fs.readFileSync("file.txt", "utf8").split("\n").map(s => s.trim()).filter(Boolean);
-  const names = fs.existsSync("names.txt") ? fs.readFileSync("names.txt", "utf8").split("\n").map(s => s.trim()).filter(Boolean) : [];
+  const comments = fs.readFileSync("file.txt", "utf8")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const names = fs.existsSync("names.txt")
+    ? fs.readFileSync("names.txt", "utf8").split("\n").map((s) => s.trim()).filter(Boolean)
+    : [];
 
   if (comments.length === 0) {
     console.error("No comments found in file.txt");
@@ -112,7 +114,6 @@ async function setElementText(page, selector, text) {
   const delayInMs = 20000; // 20s between comments
   let cycle = 1;
 
-  // selectors to try for the comment composer
   const composerSelectors = [
     'div[aria-label="Write a comment"]',
     'div[aria-label="Write a comment…"]',
@@ -121,7 +122,7 @@ async function setElementText(page, selector, text) {
     '[role="presentation"] div[contenteditable="true"]',
     'div[contenteditable="true"]',
     '[data-testid="status-attachment-mentions-input"]',
-    'textarea'
+    'textarea',
   ];
 
   while (true) {
@@ -132,7 +133,7 @@ async function setElementText(page, selector, text) {
       const finalComment = name ? `${name} ${comment}` : comment;
 
       try {
-        await page.waitForTimeout(1500); // wait for dynamic content
+        await delay(1500);
 
         const found = await findVisibleElement(page, composerSelectors, 15000);
         if (!found) {
@@ -144,14 +145,14 @@ async function setElementText(page, selector, text) {
 
         try {
           await found.el.click({ delay: 50 });
-        } catch (clickErr) {
-          await page.evaluate(sel => {
+        } catch {
+          await page.evaluate((sel) => {
             const el = document.querySelector(sel);
             if (el) el.click();
           }, found.sel);
         }
 
-        await page.waitForTimeout(500);
+        await delay(500);
 
         const success = await setElementText(page, found.sel, finalComment);
         if (!success) throw new Error("Failed to set composer text");
@@ -160,7 +161,7 @@ async function setElementText(page, selector, text) {
           await page.keyboard.press("Enter");
         } catch {}
 
-        await page.waitForTimeout(2000);
+        await delay(2000);
         await page.screenshot({ path: `after-comment-${Date.now()}.png` });
         console.log("✅ Commented:", finalComment);
 
