@@ -1,10 +1,8 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
-// Delay helper
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// Set text safely
 async function setElementText(page, selector, text) {
   try {
     await page.focus(selector);
@@ -30,7 +28,6 @@ async function setElementText(page, selector, text) {
   }
 }
 
-// Find visible element from multiple selectors
 async function findVisibleElement(page, selectors, timeout = 20000) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
@@ -49,8 +46,15 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false, // Headless off for debugging
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: "new", // Server-safe headless
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-gpu",
+      "--disable-dev-shm-usage",
+      "--single-process",
+      "--disable-software-rasterizer",
+    ],
     defaultViewport: null,
   });
 
@@ -86,6 +90,7 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
     .split("\n")
     .map((s) => s.trim())
     .filter(Boolean);
+
   const names = fs.existsSync("names.txt")
     ? fs
         .readFileSync("names.txt", "utf8")
@@ -142,9 +147,7 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
         await page.keyboard.press("Enter");
         await delay(2000);
 
-        await page.screenshot({ path: `after-comment-${Date.now()}.png` });
         console.log("✅ Commented:", finalComment);
-
         await delay(delayInMs);
       } catch (err) {
         console.error("❌ Failed to comment:", finalComment, err.message);
