@@ -29,7 +29,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   console.log("📸 Screenshot saved: post-opened.png");
 
   // Read comments
-  const comments = fs.readFileSync("file. txt", "utf8").split("\n").filter(Boolean);
+  const comments = fs.readFileSync("file.txt", "utf8").split("\n").filter(Boolean);
   const names = fs.existsSync("names.txt")
     ? fs.readFileSync("names.txt", "utf8").split("\n").filter(Boolean)
     : [];
