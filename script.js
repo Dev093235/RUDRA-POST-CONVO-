@@ -16,7 +16,7 @@ async function findVisibleElement(page, selectors, timeout = 15000) {
           return { el, sel };
         }
       } catch (e) {
-        // ignore selector errors
+        // ignore
       }
     }
     await page.waitForTimeout(300);
@@ -27,18 +27,16 @@ async function findVisibleElement(page, selectors, timeout = 15000) {
 // --- safe method to set text in contenteditable or textarea/input
 async function setElementText(page, selector, text) {
   try {
-    // Try typing first
     await page.focus(selector);
     await page.keyboard.type(text, { delay: 30 });
     return true;
   } catch (err) {
-    // Fallback: set via DOM and dispatch input events
+    // fallback
     const ok = await page.evaluate(
       (sel, txt) => {
         const el = document.querySelector(sel);
         if (!el) return false;
         if (el.isContentEditable) {
-          // set text nodes
           el.innerText = txt;
           el.focus();
           el.dispatchEvent(new InputEvent("input", { bubbles: true }));
@@ -60,14 +58,20 @@ async function setElementText(page, selector, text) {
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false, // set to true when stable; false helps debugging
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: true, // server-friendly
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-gpu",
+      "--disable-software-rasterizer",
+      "--disable-dev-shm-usage"
+    ],
     defaultViewport: null,
   });
 
   const page = await browser.newPage();
 
-  // Force desktop UA (helps keep consistent layout)
+  // Force desktop UA
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
   );
@@ -105,7 +109,7 @@ async function setElementText(page, selector, text) {
     return;
   }
 
-  const delayInMs = 20000; // 20s between comments (adjust as needed)
+  const delayInMs = 20000; // 20s between comments
   let cycle = 1;
 
   // selectors to try for the comment composer
@@ -128,10 +132,8 @@ async function setElementText(page, selector, text) {
       const finalComment = name ? `${name} ${comment}` : comment;
 
       try {
-        // Wait a bit for dynamic content
-        await page.waitForTimeout(1500);
+        await page.waitForTimeout(1500); // wait for dynamic content
 
-        // Find visible composer
         const found = await findVisibleElement(page, composerSelectors, 15000);
         if (!found) {
           console.error("❌ Composer not found. Saving debug screenshot.");
@@ -140,48 +142,34 @@ async function setElementText(page, selector, text) {
         }
         console.log("✅ Found composer using selector:", found.sel);
 
-        // If the composer is not directly clickable (sometimes hidden), try clicking an accessible label or the container
         try {
           await found.el.click({ delay: 50 });
         } catch (clickErr) {
-          // fallback: click via evaluate
           await page.evaluate(sel => {
             const el = document.querySelector(sel);
             if (el) el.click();
           }, found.sel);
         }
 
-        // Give FB a moment to attach events
         await page.waitForTimeout(500);
 
-        // Try to set the text (typing first, evaluate fallback inside)
         const success = await setElementText(page, found.sel, finalComment);
         if (!success) throw new Error("Failed to set composer text");
 
-        // Submit: try Enter, else try click on Post/Send button if exists
         try {
           await page.keyboard.press("Enter");
-        } catch (e) {
-          // no-op; we'll try to find a button (rare)
-        }
+        } catch {}
 
-        // wait and screenshot success
         await page.waitForTimeout(2000);
         await page.screenshot({ path: `after-comment-${Date.now()}.png` });
         console.log("✅ Commented:", finalComment);
 
-        // delay between comments
         await delay(delayInMs);
       } catch (err) {
         console.error("❌ Failed to comment:", finalComment, err.message);
-        // save screenshot for debugging
         await page.screenshot({ path: `comment-error-${Date.now()}.png` });
-        // continue to next comment
       }
     }
     cycle++;
   }
-
-  // never reached
-  // await browser.close();
 })();
