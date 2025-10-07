@@ -21,7 +21,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   await page.setCookie(...cookies);
 
   // ✅ Your Facebook Post URL (added)
-  const postUrl = "https://www.facebook.com/evkng.263642/videos/1247403803602141/?app=fbl";
+  const postUrl = "https://www.facebook.com/share/p/1CW3v3vPeW/";
   await page.goto(postUrl, { waitUntil: "networkidle2" });
 
   // Screenshot to verify login/post load
