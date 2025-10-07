@@ -1,13 +1,13 @@
 [
   {
     "name": "datr",
-    "value": "sL9XaCrYWFpK86M9B462_5z9",
+    "value": "5ymeaL6nEysXsrxMzxaAN8KB",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "sb",
-    "value": "sL9XaJtFjuCqnVg3n_lNi5fh",
+    "value": "5ymeaBR6UzolKnUQIYBpTpAY",
     "domain": ".facebook.com",
     "path": "/"
   },
@@ -18,8 +18,8 @@
     "path": "/"
   },
   {
-    "name": "dpr",
-    "value": "2.625",
+    "name": "vpd",
+    "value": "v1%3B749x411x2.625",
     "domain": ".facebook.com",
     "path": "/"
   },
@@ -36,68 +36,56 @@
     "path": "/"
   },
   {
-    "name": "vpd",
-    "value": "v1%3B749x411x2.625",
+    "name": "wd",
+    "value": "412x892",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "x-referer",
-    "value": "eyJyIjoiL2NoZWNrcG9pbnQvMTUwMTA5MjgyMzUyNTI4Mi9sb2dvdXQvP25leHQ9aHR0cHMlM0ElMkYlMkZtLmZhY2Vib29rLmNvbSUyRiIsImgiOiIvY2hlY2twb2ludC8xNTAxMDkyODIzNTI1MjgyL2xvZ291dC8%2FbmV4dD1odHRwcyUzQSUyRiUyRm0uZmFjZWJvb2suY29tJTJGIiwicyI6Im0ifQ%3D%3D",
-    "domain": ".facebook.com",
-    "path": "/"
-  },
-  {
-    "name": "locale",
-    "value": "en_GB",
-    "domain": ".facebook.com",
-    "path": "/"
-  },
-  {
-    "name": "pas",
-    "value": "61577311989551%3A9ZkZTvBWfl%2C100088819703826%3Az6c7eUaKfj",
+    "value": "eyJyIjoiL2NoZWNrcG9pbnQvMTUwMTA5MjgyMzUyNTI4Mi9sb2dvdXQvP25leHQ9aHR0cHMlM0ElMkYlMkZtLmZhY2Vib29rLmNvbSUyRiUzRmRlb2lhJTNEMSIsImgiOiIvY2hlY2twb2ludC8xNTAxMDkyODIzNTI1MjgyL2xvZ291dC8%2FbmV4dD1odHRwcyUzQSUyRiUyRm0uZmFjZWJvb2suY29tJTJGJTNGZGVvaWElM0QxIiwicyI6Im0ifQ%3D%3D",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "c_user",
-    "value": "100088819703826",
+    "value": "61581900445114",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "xs",
-    "value": "17%3AW_lIcLKAH1sthQ%3A2%3A1751620381%3A-1%3A-1",
+    "value": "37%3AmlfUWcAC02CUpw%3A2%3A1759827971%3A-1%3A-1",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
-    "name": "presence",
-    "value": "C%7B%22t3%22%3A%5B%7B%22o%22%3A0%2C%22i%22%3A%22g.8306631619393831%22%7D%2C%7B%22o%22%3A0%2C%22i%22%3A%22g.30086314161012071%22%7D%2C%7B%22o%22%3A0%2C%22i%22%3A%22g.9571009009653828%22%7D%5D%2C%22utc3%22%3A1751621023813%2C%22v%22%3A1%7D",
+    "name": "locale",
+    "value": "en_US",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
-    "name": "wd",
-    "value": "411x749",
+    "name": "pas",
+    "value": "61568499464435%3AsvAOZoMoaZ%2C100053744656021%3AWwqKXIvvWH%2C61581685558463%3A7Xpe0H6oFD%2C61577944656330%3AuY4vGgmAO1%2C61581900445114%3ArvAaCbj3Dd",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "fr",
-    "value": "0F1W3EepyTvjaHLkB.AWebtY-QnyNj3wDAbGDJp73ku94S7mEXdZ6pQNxnBTZuvk2hZdQ.BoV7-w..AAA.0.0.BoaAtc.AWelgTgupkA4v9_upDzYffDOO30",
-    "domain": ".facebook.com",
-    "path": "/"
-  },
-  {
-    "name": "wl_cbv",
-    "value": "v2%3Bclient_version%3A2859%3Btimestamp%3A1751649116",
+    "value": "0ujXDVCmxeSlXgJnB.AWdvndqby9eKVGD_SHrNWYmlIArapALjeJkiu44eSJxaF1Q6SZI.Boninn..AAA.0.0.Bo5OR-.AWcyB7N9rV08ypi5fcnAFA2nSsM",
     "domain": ".facebook.com",
     "path": "/"
   },
   {
     "name": "fbl_st",
-    "value": "101229550%3BT%3A29194151",
+    "value": "100720534%3BT%3A29330519",
+    "domain": ".facebook.com",
+    "path": "/"
+  },
+  {
+    "name": "wl_cbv",
+    "value": "v2%3Bclient_version%3A2947%3Btimestamp%3A1759831166",
     "domain": ".facebook.com",
     "path": "/"
   }
