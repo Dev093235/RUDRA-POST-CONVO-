@@ -1,10 +1,10 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
-// Delay helper (all Puppeteer versions)
+// Delay helper
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// Safe set text
+// Set text safely
 async function setElementText(page, selector, text) {
   try {
     await page.focus(selector);
@@ -30,7 +30,7 @@ async function setElementText(page, selector, text) {
   }
 }
 
-// Find visible element from list of selectors
+// Find visible element from multiple selectors
 async function findVisibleElement(page, selectors, timeout = 20000) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
@@ -49,7 +49,7 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false, // Headless off for debugging
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     defaultViewport: null,
   });
@@ -61,7 +61,7 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
   );
 
   if (!fs.existsSync("cookies.json")) {
-    console.error("cookies.json missing! Add your Facebook cookies first.");
+    console.error("❌ cookies.json missing! Add your Facebook cookies first.");
     await browser.close();
     return;
   }
@@ -76,7 +76,7 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
   console.log("📸 Screenshot saved: post-opened.png");
 
   if (!fs.existsSync("file.txt")) {
-    console.error("file.txt missing! Create it with one comment per line.");
+    console.error("❌ file.txt missing! Create it with one comment per line.");
     await browser.close();
     return;
   }
@@ -87,7 +87,8 @@ async function findVisibleElement(page, selectors, timeout = 20000) {
     .map((s) => s.trim())
     .filter(Boolean);
   const names = fs.existsSync("names.txt")
-    ? fs.readFileSync("names.txt", "utf8")
+    ? fs
+        .readFileSync("names.txt", "utf8")
         .split("\n")
         .map((s) => s.trim())
         .filter(Boolean)
