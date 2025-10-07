@@ -34,7 +34,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     ? fs.readFileSync("names.txt", "utf8").split("\n").filter(Boolean)
     : [];
 
-  const delayInMs = 10000; // ⏳ 5 second delay
+  const delayInMs = 20000; // ⏳ 5 second delay
   let cycle = 1;
 
   while (true) {
